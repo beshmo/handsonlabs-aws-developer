@@ -1,4 +1,6 @@
-# handsonlabs-aws-developer
+# AWS Developer Associate Hands-On Labs
+
+### Zero to DVA-C02: 80 Hands-On Labs
 
 Guided, hands-on labs to practice every Task and Skill in the [AWS Certified Developer – Associate (DVA-C02)](specs/exam/) exam guide. Labs run entirely in the [KodeKloud AWS Playground](specs/kodekloud-aws-playground.md) — no personal AWS account or bill required.
 
