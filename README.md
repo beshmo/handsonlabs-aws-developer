@@ -75,3 +75,5 @@ This repo's lab content is generated incrementally, one lab at a time, to keep q
 **Other open items:**
 - [ ] Run each `Drafted` lab end-to-end in the KodeKloud playground and promote it to `Reviewed` in `labs/INDEX.md`'s Status log.
 - [ ] Decide whether a lightweight cleanup-verification script (or checklist) is worth adding once enough labs exist, to help students confirm a playground session left no orphaned resources.
+- [ ] Add a feature for students to save which labs they've completed.
+- [ ] Add a dashboard giving an overview of which modules, tasks, and skills are covered by the labs completed so far.
