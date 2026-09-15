@@ -4,6 +4,10 @@
 
 Guided, hands-on labs to practice every Task and Skill in the [AWS Certified Developer – Associate (DVA-C02)](specs/exam/) exam guide. Labs run entirely in the [KodeKloud AWS Playground](specs/kodekloud-aws-playground.md) — no personal AWS account or bill required.
 
+## Requirements
+
+**You need access to an AWS sandbox environment to complete these labs** — a personal AWS account is not required (and not recommended, since labs are tuned to a specific sandbox's limits, not real billing). We recommend the **[KodeKloud AWS Playground](specs/kodekloud-aws-playground.md)** (subscription required): every lab in this course is designed and constrained around its specific resource limits, allowed services, and session length, so it's the environment these labs are guaranteed to work in as written. Running them in a different sandbox or a real AWS account is possible, but you'll need to adapt steps to whatever limits that environment enforces.
+
 ## Core concepts
 
 **The playground is the constraint, not an afterthought.** Every lab is designed to work within the KodeKloud AWS Playground's resource limits (e.g. Lambda capped at 256 MB / 10 s, DynamoDB on-demand or 1 RCU/1 WCU, EC2 `t2`/`t3` nano–medium only, 3 fixed regions). See [`specs/kodekloud-aws-playground.md`](specs/kodekloud-aws-playground.md) for the full list before you assume a step will work.
