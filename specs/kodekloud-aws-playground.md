@@ -1,6 +1,6 @@
 # KodeKloud AWS Playground
 
-The KodeKloud AWS Playground provides a simplified learning environment where you can:
+The [KodeKloud AWS Playground](https://kodekloud.com/cloud-playgrounds/aws) provides a simplified learning environment where you can:
 
 * Experiment with AWS services hands-on
 * Learn by doing without creating an AWS account
