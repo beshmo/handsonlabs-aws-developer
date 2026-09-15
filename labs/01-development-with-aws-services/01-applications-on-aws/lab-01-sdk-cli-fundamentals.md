@@ -2,7 +2,7 @@
 
 **Module:** Domain 1 — Development with AWS Services
 **Task:** Task 1 — Develop code for applications hosted on AWS
-**Estimated Duration:** ~30 minutes
+**Estimated Duration:** ~30 minutes (Purpose → Validation; Cleanup is optional and untimed)
 **Skills Practiced (primary):**
 - `1.1.9` — Write code that interacts with AWS services by using APIs and AWS SDKs
 
@@ -107,7 +107,9 @@ Every exam skill and every later lab in this course assumes you're comfortable m
 - `aws s3 cp s3://$BUCKET_NAME/hello.json -` prints `{"message": "written by boto3"}`.
 - `aws dynamodb get-item --table-name "$TABLE_NAME" --key '{"pk": {"S": "demo-item"}}'` returns the same item the SDK wrote.
 
-## Cleanup
+## Cleanup (Optional)
+
+*Optional — the KodeKloud Playground automatically terminates and removes all session resources when your session ends. Run this only if you want to tear resources down sooner, e.g. to free up quota for another lab in the same session.*
 
 Run these in the same CloudShell session (variables are still set):
 ```bash

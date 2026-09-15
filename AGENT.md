@@ -18,7 +18,7 @@ The master catalog is `labs/INDEX.md`. It is the single source of truth for what
 ## Hard constraints (non-negotiable)
 
 1. **Self-contained.** Every lab creates every resource it needs and never assumes a resource left over from another lab.
-2. **~30 minutes.** A lab must be completable, including cleanup, in about 30 minutes. KodeKloud sessions run out around the 1-hour mark; students need margin. If a skill cluster can't fit in 30 minutes, split it into two labs rather than stretch the time box.
+2. **~30 minutes.** A lab's Purpose through Validation must be completable in about 30 minutes. KodeKloud sessions run out around the 1-hour mark; students need margin. Cleanup is a separate, optional, untimed step (see constraint 4) and does not count toward this budget. If a skill cluster can't fit in 30 minutes, split it into two labs rather than stretch the time box.
 3. **Playground limits are absolute.** Before writing any step, check `specs/kodekloud-aws-playground.md` for the services involved and stay inside every limit, for example:
    - Lambda: max 256 MB memory, max 10 s timeout, no container images, max ~300 invocations/hour.
    - EC2: `t2`/`t3` nano–medium only, max 2 vCPU / 4 GB RAM per instance, GP2/GP3 volumes ≤30 GB, Standard CPU credit mode only, no Spot/Dedicated Hosts/Capacity Reservations.
@@ -27,7 +27,7 @@ The master catalog is `labs/INDEX.md`. It is the single source of truth for what
    - RDS: `*.micro`/`*.small`/`*.medium` burstable classes only, Single-AZ, GP2/GP3, ≤30 GB, no Provisioned IOPS.
    - Any other service: check the relevant section of the playground doc before writing steps.
    This list is illustrative, not exhaustive — always re-check the source doc for the services a lab actually touches.
-4. **Cleanup is mandatory.** Every lab ends with a `## Cleanup` section that tears down every resource it created, in dependency order. The playground has tight account-wide quotas (e.g., max 10 EC2 instances, max 2 Kinesis streams, max 1 OpenSearch domain) — leftover resources from one student's lab can block the next lab.
+4. **Cleanup is documented, not timed or mandatory.** Every lab ends with an optional `## Cleanup (Optional)` section that tears down every resource it created, in dependency order. The KodeKloud Playground automatically terminates and cleans up all resources when a session ends, so cleanup isn't required to avoid leftover cost. Document it anyway, as a courtesy for a student who wants to free up quota to fit another lab into the same running session — the playground's account-wide quotas (e.g., max 10 EC2 instances, max 2 Kinesis streams, max 1 OpenSearch domain) still apply within a session.
 
 ## Mandatory use of context7 for technical accuracy
 
@@ -52,7 +52,7 @@ Every lab file must start with exactly this structure:
 
 **Module:** Domain <N> — <Domain Name>
 **Task:** Task <N> — <Task Name>
-**Estimated Duration:** ~30 minutes
+**Estimated Duration:** ~30 minutes (Purpose → Validation; Cleanup is optional and untimed)
 **Skills Practiced (primary):**
 - `X.Y.Z` — <verbatim skill text from the relevant specs/exam/Domain_*.md>
 
@@ -79,7 +79,9 @@ Every lab file must start with exactly this structure:
 
 - <How the student confirms the lab worked — a CLI command whose output proves success, or a console check.>
 
-## Cleanup
+## Cleanup (Optional)
+
+*Optional — the KodeKloud Playground automatically terminates and removes all session resources when your session ends. Run this only if you want to tear resources down sooner, e.g. to free up quota for another lab in the same session.*
 
 - <Explicit teardown command/step for every resource created, in dependency order.>
 
@@ -103,8 +105,8 @@ A lab is done when:
 - [ ] The header matches the required template exactly, with correct Lab ID, real skill IDs and verbatim skill text, and only services from `In-Scope_AWS_Services.md`.
 - [ ] Every command/parameter was checked against context7 docs, not assumed from training data.
 - [ ] Every resource/instance type/size/region choice fits `specs/kodekloud-aws-playground.md`.
-- [ ] The lab is self-contained and realistically completable in ~30 minutes.
-- [ ] A `## Cleanup` section removes every resource created.
+- [ ] The lab is self-contained and its Purpose–Validation flow is realistically completable in ~30 minutes.
+- [ ] A `## Cleanup (Optional)` section documents teardown for every resource created, in dependency order.
 - [ ] `labs/INDEX.md`'s row for this Lab ID has its `Status` updated (`Planned` → `Drafted`, and → `Reviewed` once a human has run it).
 
 ## How to add or generate a lab

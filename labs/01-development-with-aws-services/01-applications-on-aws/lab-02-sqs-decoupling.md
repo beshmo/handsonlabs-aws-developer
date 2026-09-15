@@ -2,7 +2,7 @@
 
 **Module:** Domain 1 — Development with AWS Services
 **Task:** Task 1 — Develop code for applications hosted on AWS
-**Estimated Duration:** ~30 minutes
+**Estimated Duration:** ~30 minutes (Purpose → Validation; Cleanup is optional and untimed)
 **Skills Practiced (primary):**
 - `1.1.3` — Describe differences between tightly coupled and loosely coupled components
 - `1.1.8` — Write code to use messaging services
@@ -133,7 +133,9 @@ A producer that calls a consumer directly is *tightly coupled* — if the consum
 - `aws logs filter-log-events` shows three `Consumed message: {...}` lines with `order_id` 1, 2, and 3 — proof the Lambda consumer processed every message the producer sent, despite the producer never referencing Lambda, the function name, or the IAM role at any point.
 - `aws sqs get-queue-attributes --queue-url "$QUEUE_URL" --attribute-names ApproximateNumberOfMessages` returns `0` once processing has finished, confirming the queue drained.
 
-## Cleanup
+## Cleanup (Optional)
+
+*Optional — the KodeKloud Playground automatically terminates and removes all session resources when your session ends. Run this only if you want to tear resources down sooner, e.g. to free up quota for another lab in the same session.*
 
 ```bash
 aws lambda delete-event-source-mapping --uuid "$MAPPING_UUID"

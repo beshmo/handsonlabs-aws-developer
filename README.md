@@ -12,7 +12,7 @@ Guided, hands-on labs to practice every Task and Skill in the [AWS Certified Dev
 
 **The playground is the constraint, not an afterthought.** Every lab is designed to work within the KodeKloud AWS Playground's resource limits (e.g. Lambda capped at 256 MB / 10 s, DynamoDB on-demand or 1 RCU/1 WCU, EC2 `t2`/`t3` nano–medium only, 3 fixed regions). See [`specs/kodekloud-aws-playground.md`](specs/kodekloud-aws-playground.md) for the full list before you assume a step will work.
 
-**Labs are self-contained and ~30 minutes long.** Each lab creates every resource it uses and tears it down at the end — no lab depends on another lab's leftovers. That also means you can do them in any order, and each one comfortably fits inside a single KodeKloud session (which itself runs out around the 1-hour mark).
+**Labs are self-contained and ~30 minutes long.** That estimate covers Purpose through Validation — Cleanup is a separate, optional final step, since the KodeKloud Playground automatically terminates and cleans up every resource when a session ends. No lab depends on another lab's leftovers, so you can do them in any order, and each one comfortably fits inside a single KodeKloud session (which itself runs out around the 1-hour mark).
 
 **Labs are organized by exam Domain and Task.** The folder layout mirrors the exam guide directly:
 ```
@@ -26,7 +26,7 @@ Each domain folder has one subfolder per exam Task, and each Task folder has a `
 
 **`labs/INDEX.md` is the single source of truth.** It catalogs all 80 planned labs with their title, file path, exam skill IDs (primary + secondary), AWS services used, and a full skill-coverage matrix mapping every one of the exam's 101 skill IDs to the lab(s) that teach it — so you can confirm nothing is missing, or jump straight to the skill you're weakest on.
 
-**Every lab has the same anatomy:** a header (skills practiced, services used, region, prerequisites, playground constraints), a Purpose section, numbered Steps, a Validation section to confirm you did it right, and a mandatory Cleanup section. Read Cleanup before you start a lab, not after — know what you're on the hook to tear down.
+**Every lab has the same anatomy:** a header (skills practiced, services used, region, prerequisites, playground constraints), a Purpose section, numbered Steps, a Validation section to confirm you did it right, and an optional Cleanup section. Cleanup isn't required — the playground tears everything down when your session ends — but it's there if you want to free up quota to fit another lab into the same session.
 
 **Labs favor the AWS CLI / SDK over the console** wherever practical, since that's what the exam actually tests (skills like 1.1.9, 2.1.3, 2.1.4). Most labs run entirely from AWS CloudShell, so there's no local setup.
 
@@ -34,7 +34,7 @@ Each domain folder has one subfolder per exam Task, and each Task folder has a `
 
 1. Read [`labs/README.md`](labs/README.md) for the full student orientation (how to pick a lab, recommended order, what to expect).
 2. Browse [`labs/INDEX.md`](labs/INDEX.md) for the complete catalog and skill-coverage matrix.
-3. Open a lab file and follow it top to bottom: Purpose → Steps → Validation → Cleanup.
+3. Open a lab file and follow it top to bottom: Purpose → Steps → Validation → Cleanup (optional).
 
 ## For maintainers: extending the course
 

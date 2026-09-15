@@ -13,7 +13,7 @@ A self-paced, hands-on lab course for the **AWS Certified Developer – Associat
 - `labs/INDEX.md` is the single source of truth for which labs exist, their status (`Planned` → `Drafted` → `Reviewed`), and their skill-coverage mapping. Any new/changed lab must be reflected there.
 - `specs/exam/Domain_{1,2,3,4}_*.md` and `specs/exam/In-Scope_AWS_Services.md` bound what a lab may teach or use — never invent a skill or service outside these.
 - `specs/kodekloud-aws-playground.md` bounds every resource choice (instance types, memory/timeout ceilings, regions, capacity modes, counts). Check it for every service a lab touches before writing steps.
-- Every lab must be self-contained (creates and tears down all its own resources), ~30 minutes including cleanup, and end with a mandatory `## Cleanup` section.
+- Every lab must be self-contained and its Purpose–Validation flow completable in ~30 minutes. Cleanup is a separate, optional, untimed final step (`## Cleanup (Optional)`) — the KodeKloud Playground auto-terminates and cleans up all resources when a session ends, so cleanup is documented as a courtesy (e.g. to free quota for another lab in the same session), not a hard requirement.
 - Every lab file must follow the exact header template in `AGENT.md` (Lab ID, module/task, skills practiced with verbatim skill text, services, region, prerequisites, playground constraints) followed by Purpose → Steps → Validation → Cleanup → References.
 
 ## Mandatory use of context7

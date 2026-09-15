@@ -20,11 +20,11 @@ Each domain folder has one subfolder per exam Task, and each Task folder has a `
 2. Open that lab's file. Its header lists the exact exam skill IDs it practices, the AWS services it uses, and the playground constraints to keep in mind.
 3. Read **Purpose** first, then follow **Steps** in order.
 4. Use **Validation** to confirm you did it right.
-5. **Always run Cleanup before ending your KodeKloud session.** Every lab is self-contained by design — it creates its own resources and is responsible for deleting them. Leftover resources from a previous lab can eat into another lab's playground quota (e.g. only 10 concurrent EC2 instances, 2 Kinesis streams, 1 OpenSearch domain account-wide).
+5. **Cleanup is optional.** The KodeKloud Playground automatically terminates and cleans up every resource when your session ends, so you don't need to run Cleanup before closing a session. Run it mid-session only if you want to free up quota to fit another lab into the same session (e.g. only 10 concurrent EC2 instances, 2 Kinesis streams, 1 OpenSearch domain account-wide).
 
 ## What to expect from a lab
 
-- **~30 minutes**, including cleanup. KodeKloud sessions run out around the 1-hour mark, so labs are scoped to comfortably fit with margin — plan for two labs per session at most if you want a buffer.
+- **~30 minutes** for Purpose through Validation — Cleanup is a separate, optional, untimed step. KodeKloud sessions run out around the 1-hour mark, so labs are scoped to comfortably fit with margin — plan for two labs per session at most if you want a buffer.
 - **Fully self-contained.** No lab depends on another lab's leftover resources. You can do them in any order within a domain, though the suggested order in each Task folder builds concepts progressively.
 - **CLI-first.** Most labs use the AWS CLI or an SDK, since that's what the exam tests (skills 1.1.9, 2.1.3, 2.1.4). The console is used only where it's genuinely the right tool for the skill.
 

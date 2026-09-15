@@ -13,7 +13,7 @@ Generates one lab file at a time for the `handsonlabs-aws-developer` DVA-C02 cou
 
 ## Workflow
 
-1. **Read `AGENT.md`** at the repo root in full. It defines the non-negotiable constraints (self-contained, ~30 min, KodeKloud playground limits, mandatory cleanup), the required header template, and the style guide. Every rule there applies to the file you're about to write.
+1. **Read `AGENT.md`** at the repo root in full. It defines the non-negotiable constraints (self-contained, ~30 min for Purpose–Validation, KodeKloud playground limits, optional/untimed cleanup), the required header template, and the style guide. Every rule there applies to the file you're about to write.
 
 2. **Read `labs/INDEX.md`** and find the row for the requested Lab ID. Note: title, file path (module/task folder + filename), Primary Skills, Secondary Skills, Services. If the Lab ID isn't in the catalog, stop and tell the user — don't invent a new lab without it first being added to the catalog (per AGENT.md's "How to add or generate a lab").
 
@@ -28,7 +28,7 @@ Generates one lab file at a time for the `handsonlabs-aws-developer` DVA-C02 cou
    - Purpose: 2-4 sentences.
    - Steps: numbered, each with a one-line rationale tied back to a listed skill.
    - Validation: a concrete way to confirm success.
-   - Cleanup: explicit teardown of every resource created, in dependency order — this section is mandatory, not optional.
+   - Cleanup (Optional): explicit teardown of every resource created, in dependency order, under a `## Cleanup (Optional)` heading with a one-line note that the KodeKloud Playground auto-cleans on session end — this section doesn't count toward the ~30-minute estimate and isn't required, but always document it.
    - References: the AWS docs actually consulted via context7.
 
 7. **Update `labs/INDEX.md`**: change this lab's status from `Planned` to `Drafted` (add a `Status` note next to its row, or update the shared status table if one exists by then).
@@ -38,6 +38,6 @@ Generates one lab file at a time for the `handsonlabs-aws-developer` DVA-C02 cou
 ## Guardrails
 
 - One lab per invocation. If the user asks for a whole task or domain, build the first lab, report it, and ask whether to continue with the next one rather than silently generating all of them (each one needs the same context7 verification rigor — don't shortcut it under volume pressure).
-- Never relax the ~30-minute or self-contained constraints to fit more into a lab. If the catalog's skill grouping for this Lab ID genuinely doesn't fit in 30 minutes once you're drafting real steps, stop and flag it to the user instead of shipping an oversized lab — the catalog entry may need to be split.
+- Never relax the ~30-minute (Purpose–Validation, excluding the optional Cleanup) or self-contained constraints to fit more into a lab. If the catalog's skill grouping for this Lab ID genuinely doesn't fit in 30 minutes once you're drafting real steps, stop and flag it to the user instead of shipping an oversized lab — the catalog entry may need to be split.
 - Never use a service, instance type, memory size, timeout, or region the playground doc disallows, even if it would make for a more "complete" demonstration. Work within the sandbox.
 - If context7 returns nothing useful or errors, say so to the user rather than falling back to unverified memory for that command.
