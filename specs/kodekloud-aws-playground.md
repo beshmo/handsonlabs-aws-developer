@@ -676,6 +676,37 @@ Basic operations are supported.
 
 ## Security & Identity
 
+### IAM (observed behavior)
+
+*Not part of KodeKloud's official service list — recorded here from testing in the playground (`kk_labs_user_*`), so labs don't assume permissions the sandbox doesn't grant.*
+
+#### Allowed (confirmed)
+
+* `iam:CreateRole` — creating a role with a trust policy works.
+* `iam:AttachRolePolicy` — attaching an AWS **managed** policy to a role works (e.g. `arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole`).
+
+#### Denied (confirmed)
+
+* `iam:PutRolePolicy` — inline role policies fail with `AccessDenied` (no identity-based policy allows it). Labs must attach managed policies instead. Only the pre-provisioned `EC2LabRole` supports `PutRolePolicy` (see Quick Start Guide below).
+
+* `iam:PassRole` on user-created roles at the default path `/` — `lambda create-function --role arn:aws:iam::<acct>:role/<name>` fails with `AccessDeniedException ... not authorized to perform: iam:PassRole`.
+
+#### Allowed workaround (confirmed)
+
+* Create the role under the **`/service-role/`** path (`aws iam create-role --path /service-role/ ...`, the path the Lambda console uses) and pass it with `--role arn:aws:iam::<acct>:role/service-role/<name>`. `lambda create-function` then succeeds. **Every lab that creates a Lambda execution role must use this path.**
+
+* No pre-provisioned role trusts `lambda.amazonaws.com` (`aws iam list-roles` in the tested account showed only service-linked roles; `EC2LabRole` was not present). The sandbox user also has an explicit deny from policy `AWS_EKSECSWithConditions` (e.g. `iam:ListAttachedUserPolicies`), so IAM is restricted via conditional policies.
+
+* `lambda:DeleteEventSourceMapping` — `aws lambda delete-event-source-mapping` fails with `AccessDeniedException` (creating one with `create-event-source-mapping` works). Labs' cleanup must not depend on it. Deleting the function/queue does not remove the mapping either — it stays `Enabled` as an inert orphan until the session ends.
+
+#### Also confirmed working
+
+* `iam:DetachRolePolicy`, `iam:DeleteRole` (on a `/service-role/` role), `lambda:DeleteFunction`, `lambda:CreateEventSourceMapping` (SQS), `sqs:DeleteQueue`.
+
+#### Not yet verified
+
+* `PassRole` for other services (e.g. Step Functions, ECS task roles) — check per lab.
+
 ### Cognito
 
 #### Allowed

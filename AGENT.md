@@ -25,6 +25,7 @@ The master catalog is `labs/INDEX.md`. It is the single source of truth for what
    - DynamoDB: PAY_PER_REQUEST or provisioned 1 RCU / 1 WCU only, no global tables.
    - Regions: only `us-east-1`, `us-west-2`, `us-east-2`.
    - RDS: `*.micro`/`*.small`/`*.medium` burstable classes only, Single-AZ, GP2/GP3, ≤30 GB, no Provisioned IOPS.
+   - IAM: roles can be created and AWS managed policies attached, but inline role policies (`iam:PutRolePolicy`) are denied, and a role can only be passed to Lambda if created with `--path /service-role/` — see the IAM section of the playground doc, and don't assume an IAM action works just because IAM is an in-scope exam service.
    - Any other service: check the relevant section of the playground doc before writing steps.
    This list is illustrative, not exhaustive — always re-check the source doc for the services a lab actually touches.
 4. **Cleanup is documented, not timed or mandatory.** Every lab ends with an optional `## Cleanup (Optional)` section that tears down every resource it created, in dependency order. The KodeKloud Playground automatically terminates and cleans up all resources when a session ends, so cleanup isn't required to avoid leftover cost. Document it anyway, as a courtesy for a student who wants to free up quota to fit another lab into the same running session — the playground's account-wide quotas (e.g., max 10 EC2 instances, max 2 Kinesis streams, max 1 OpenSearch domain) still apply within a session.
