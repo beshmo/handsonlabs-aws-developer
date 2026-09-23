@@ -45,12 +45,12 @@ This repo's lab content is generated incrementally, one lab at a time, to keep q
 
 ## Project status & TODO
 
-**Drafted so far: 2 / 80 labs** (Domain 1, Task 1):
+**Drafted so far: 3 / 80 labs** (Domain 1, Task 1):
 - [x] `D1-T1-L01` — AWS SDK & CLI Fundamentals: Making Authenticated Calls
 - [x] `D1-T1-L02` — Decoupling Services with Amazon SQS
+- [x] `D1-T1-L03` — Fan-Out Messaging with SNS + SQS
 
 **Next up — finish Domain 1, Task 1** (`labs/01-development-with-aws-services/01-applications-on-aws/`):
-- [ ] `D1-T1-L03` — Fan-Out Messaging with SNS + SQS
 - [ ] `D1-T1-L04` — Event-Driven Architecture with Amazon EventBridge
 - [ ] `D1-T1-L05` — Building Resilient Application Code (Retries, Backoff, Circuit Breakers)
 - [ ] `D1-T1-L06` — Extending APIs with API Gateway (Transformations, Validation, Status Codes)
