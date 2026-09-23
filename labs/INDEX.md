@@ -14,6 +14,7 @@ All labs below are **Planned** unless listed in the Drafted/Reviewed status log,
 |---|---|
 | D1-T1-L01 | Reviewed |
 | D1-T1-L02 | Reviewed |
+| D1-T1-L03 | Reviewed |
 
 > **IAM note:** the playground denies `iam:PutRolePolicy` (inline role policies); roles can be created and AWS managed policies attached, and Lambda execution roles must be created under `--path /service-role/` (else `iam:PassRole` is denied). Labs that build Lambda execution roles or teach IAM permissions (e.g. D2-T1-L04, D2-T1-L05) must be designed around this — see the IAM section of `specs/kodekloud-aws-playground.md`.
 
