@@ -650,6 +650,12 @@ Basic operations are supported.
 
 Basic operations are supported.
 
+#### Also confirmed working (observed in the playground, lab `D1-T1-L03`)
+
+* `sns:CreateTopic`, `sns:Publish` (with message attributes), `sns:DeleteTopic`.
+* `sns:Subscribe` with protocol `sqs` (same-account subscriptions auto-confirm), including the `RawMessageDelivery` and `FilterPolicy` subscription attributes.
+* `sqs:SetQueueAttributes` with a queue resource `Policy` that allows `sns.amazonaws.com` to `sqs:SendMessage` (scoped with `aws:SourceArn`) — SNS → SQS fan-out delivery works.
+
 ### SQS (Simple Queue Service)
 
 #### Allowed
