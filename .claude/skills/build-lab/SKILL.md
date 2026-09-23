@@ -19,7 +19,7 @@ Generates one lab file at a time for the `handsonlabs-aws-developer` DVA-C02 cou
 
 3. **Pull the verbatim skill text** for every primary and secondary skill ID from the matching `specs/exam/Domain_<N>_*.md` file — the header requires the exact wording, not a paraphrase.
 
-4. **Check playground constraints** for every service the lab uses in `specs/kodekloud-aws-playground.md`. Note the specific numeric/config limits that apply (instance types, memory/timeout ceilings, region list, capacity modes, counts). These feed the header's "Playground Constraints to Respect" bullets and must shape every step you write.
+4. **Check playground constraints** for every service the lab uses in `specs/kodekloud-aws-playground.md`. Note the specific numeric/config limits that apply (instance types, memory/timeout ceilings, region list, capacity modes, counts). These feed the header's "Playground Constraints to Respect" bullets and must shape every step you write. For any lab that creates or modifies IAM resources, read the IAM section of that doc and prefer AWS managed policies (`attach-role-policy`) — inline role policies (`put-role-policy`) are denied in the playground, and any role passed to Lambda must be created with `--path /service-role/` (ARN `role/service-role/<name>`).
 
 5. **Resolve current docs via context7** for every AWS CLI command, SDK call, IaC snippet (SAM/CloudFormation/CDK), or console step you're about to write. Query once per distinct service/tool involved in the lab (e.g. one query for the AWS CLI SQS commands, one for the Lambda SDK client in whatever language you choose). Never write a flag or parameter from memory alone — confirm it's current.
 

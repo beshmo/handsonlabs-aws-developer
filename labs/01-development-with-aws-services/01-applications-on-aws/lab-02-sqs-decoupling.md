@@ -17,7 +17,7 @@
 - Work only in `us-east-1`, `us-west-2`, or `us-east-2` — this lab uses `us-east-1`.
 - Lambda: max 256 MB memory, max 10 s timeout, no container images.
 - SQS: standard queue, basic operations only — no special configuration needed.
-- IAM: create a purpose-scoped role rather than reusing an existing broad-permission role.
+- IAM: you can create a role and attach AWS managed policies to it, but inline role policies (`iam:PutRolePolicy`) are denied — so this lab attaches a managed policy instead. Lambda can only use a role you create under the `/service-role/` path (`iam:PassRole` is denied on roles at the default `/` path).
 
 ## Purpose
 
@@ -44,7 +44,7 @@ A producer that calls a consumer directly is *tightly coupled* — if the consum
    echo "$QUEUE_URL / $QUEUE_ARN"
    ```
 
-3. **Create a least-privilege execution role for the consumer Lambda** — write the trust policy, create the role, then attach an inline policy scoped only to this queue and this function's log group:
+3. **Create an execution role for the consumer Lambda** — write the trust policy, create the role, then attach the AWS managed policy `AWSLambdaSQSQueueExecutionRole`, which grants exactly what an SQS-triggered function needs (`sqs:ReceiveMessage`, `sqs:DeleteMessage`, `sqs:GetQueueAttributes`, plus CloudWatch Logs writes):
    ```bash
    cat > trust-policy.json << 'EOF'
    {
@@ -54,28 +54,15 @@ A producer that calls a consumer directly is *tightly coupled* — if the consum
      ]
    }
    EOF
-   aws iam create-role --role-name "$ROLE_NAME" --assume-role-policy-document file://trust-policy.json
+   aws iam create-role --role-name "$ROLE_NAME" --path /service-role/ \
+       --assume-role-policy-document file://trust-policy.json
 
-   cat > exec-policy.json << EOF
-   {
-     "Version": "2012-10-17",
-     "Statement": [
-       {
-         "Effect": "Allow",
-         "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
-         "Resource": "arn:aws:logs:${AWS_REGION}:${ACCOUNT_ID}:log-group:/aws/lambda/${FUNCTION_NAME}:*"
-       },
-       {
-         "Effect": "Allow",
-         "Action": ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"],
-         "Resource": "${QUEUE_ARN}"
-       }
-     ]
-   }
-   EOF
-   aws iam put-role-policy --role-name "$ROLE_NAME" --policy-name "dva-decouple-exec-policy" --policy-document file://exec-policy.json
+   aws iam attach-role-policy --role-name "$ROLE_NAME" \
+       --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole
    ```
-   This is skill 2.1.6 in miniature (least-privilege IAM), but the point here is that the *consumer's* permissions are entirely separate from the *producer's* — another dimension of loose coupling.
+   The point here is that the *consumer's* permissions live in its own role, entirely separate from the *producer's* — another dimension of loose coupling. (Hand-writing a least-privilege inline policy is practiced in `D2-T1-L05`; the playground does not allow inline role policies.)
+
+   > **Playground note:** the role is created under the `/service-role/` path — the same path the Lambda console uses for its auto-created roles. The playground allows `iam:PassRole` only for that path, so a role at the default `/` path would make `create-function` fail with `AccessDeniedException ... iam:PassRole`. In real accounts the path is just an organizational label.
 
 4. **Write and deploy the consumer Lambda function** — it only knows how to process one SQS message at a time; it has no idea who produced it:
    ```bash
@@ -95,11 +82,13 @@ A producer that calls a consumer directly is *tightly coupled* — if the consum
    aws lambda create-function \
        --function-name "$FUNCTION_NAME" \
        --runtime python3.11 \
-       --role "arn:aws:iam::${ACCOUNT_ID}:role/${ROLE_NAME}" \
+       --role "arn:aws:iam::${ACCOUNT_ID}:role/service-role/${ROLE_NAME}" \
        --handler lambda_function.lambda_handler \
        --zip-file fileb://function.zip \
        --timeout 10 \
        --memory-size 128
+
+   aws lambda wait function-active-v2 --function-name "$FUNCTION_NAME"   # returns once State is Active
    ```
 
 5. **Wire the queue to the function with an event source mapping** — this is the piece that makes SQS actively push work to Lambda instead of Lambda having to poll manually:
@@ -130,7 +119,7 @@ A producer that calls a consumer directly is *tightly coupled* — if the consum
 ## Validation
 
 - Each `send-message` call returned a `MessageId` immediately (no error, no wait for a consumer response) — proof of the asynchronous hand-off.
-- `aws logs filter-log-events` shows three `Consumed message: {...}` lines with `order_id` 1, 2, and 3 — proof the Lambda consumer processed every message the producer sent, despite the producer never referencing Lambda, the function name, or the IAM role at any point.
+- `aws logs filter-log-events` shows three `Consumed message: {...}` lines (interleaved with Lambda's `INIT_START`/`START`/`END`/`REPORT` lines) with `order_id` 1, 2, and 3 — proof the Lambda consumer processed every message the producer sent, despite the producer never referencing Lambda, the function name, or the IAM role at any point.
 - `aws sqs get-queue-attributes --queue-url "$QUEUE_URL" --attribute-names ApproximateNumberOfMessages` returns `0` once processing has finished, confirming the queue drained.
 
 ## Cleanup (Optional)
@@ -138,13 +127,15 @@ A producer that calls a consumer directly is *tightly coupled* — if the consum
 *Optional — the KodeKloud Playground automatically terminates and removes all session resources when your session ends. Run this only if you want to tear resources down sooner, e.g. to free up quota for another lab in the same session.*
 
 ```bash
-aws lambda delete-event-source-mapping --uuid "$MAPPING_UUID"
 aws lambda delete-function --function-name "$FUNCTION_NAME"
-aws iam delete-role-policy --role-name "$ROLE_NAME" --policy-name "dva-decouple-exec-policy"
+aws iam detach-role-policy --role-name "$ROLE_NAME" \
+    --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole
 aws iam delete-role --role-name "$ROLE_NAME"
 aws sqs delete-queue --queue-url "$QUEUE_URL"
-rm -f trust-policy.json exec-policy.json lambda_function.py function.zip
+rm -f trust-policy.json lambda_function.py function.zip
 ```
+> **Playground note:** outside the playground you would first run `aws lambda delete-event-source-mapping --uuid "$MAPPING_UUID"`. The playground denies `lambda:DeleteEventSourceMapping`, so the mapping can't be removed here. Deleting the function and queue does *not* remove it — `aws lambda list-event-source-mappings --event-source-arn "$QUEUE_ARN"` will still list it as `Enabled`. It is an inert orphan (its function and queue no longer exist), and the playground clears it when your session ends.
+
 Confirm teardown:
 ```bash
 aws sqs get-queue-url --queue-name "$QUEUE_NAME"   # should error: QueueDoesNotExist
@@ -155,7 +146,8 @@ aws lambda get-function --function-name "$FUNCTION_NAME"   # should error: Resou
 
 - AWS CLI `sqs create-queue` / `send-message` / `delete-queue` — https://github.com/aws/aws-cli/blob/develop/awscli/examples/sqs/create-queue.rst, https://github.com/aws/aws-cli/blob/develop/awscli/examples/sqs/send-message.rst, https://github.com/aws/aws-cli/blob/develop/awscli/examples/sqs/delete-queue.rst
 - AWS CLI `sqs get-queue-attributes` — https://github.com/aws/aws-cli/blob/develop/awscli/examples/sqs/get-queue-attributes.rst
-- AWS CLI `iam create-role` / `put-role-policy` / `delete-role` — https://github.com/aws/aws-cli/blob/develop/awscli/examples/iam/create-role.rst, https://github.com/aws/aws-cli/blob/develop/awscli/examples/iam/put-role-policy.rst, https://github.com/aws/aws-cli/blob/develop/awscli/examples/iam/delete-role.rst
+- AWS CLI `iam create-role` / `attach-role-policy` / `detach-role-policy` / `delete-role` — https://docs.aws.amazon.com/cli/latest/reference/iam/create-role.html, https://docs.aws.amazon.com/cli/latest/reference/iam/attach-role-policy.html, https://docs.aws.amazon.com/cli/latest/reference/iam/detach-role-policy.html, https://docs.aws.amazon.com/cli/latest/reference/iam/delete-role.html
 - AWS CLI `lambda create-function` (Python runtime, IAM role propagation delay pattern) — https://docs.aws.amazon.com/cli/latest/userguide/bash_sts_code_examples.md
-- AWS CLI `lambda create-event-source-mapping` / `delete-event-source-mapping` — https://github.com/aws/aws-cli/blob/develop/awscli/examples/lambda/create-event-source-mapping.rst, https://github.com/aws/aws-cli/blob/develop/awscli/examples/lambda/delete-event-source-mapping.rst
+- AWS CLI `lambda wait function-active-v2` — https://docs.aws.amazon.com/cli/latest/reference/lambda/wait/function-active-v2.html
+- AWS CLI `lambda create-event-source-mapping` / `delete-event-source-mapping` (delete is denied in the playground) — https://github.com/aws/aws-cli/blob/develop/awscli/examples/lambda/create-event-source-mapping.rst, https://github.com/aws/aws-cli/blob/develop/awscli/examples/lambda/delete-event-source-mapping.rst
 - CloudWatch Logs `FilterLogEvents` API — https://github.com/aws/aws-cli/blob/develop/awscli/botocore/data/logs/2014-03-28/service-2.json
