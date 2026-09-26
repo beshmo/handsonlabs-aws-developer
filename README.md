@@ -41,6 +41,7 @@ Each domain folder has one subfolder per exam Task, and each Task folder has a `
 This repo's lab content is generated incrementally, one lab at a time, to keep quality and AWS-syntax accuracy high:
 - [`AGENT.md`](AGENT.md) defines the non-negotiable rules every lab must follow (playground limits, ~30 min/self-contained, mandatory [context7](https://context7.com) verification of any CLI/SDK/IaC syntax, the required header template, style guide, Definition of Done).
 - [`.claude/skills/build-lab/SKILL.md`](.claude/skills/build-lab/SKILL.md) is the reusable "build prompt" — invoke it as `/build-lab <Lab ID>` (e.g. `/build-lab D2-T2-L03`) to draft one lab's full content from its `labs/INDEX.md` catalog entry.
+- [`.claude/agents/`](.claude/agents/) holds two subagents: `builder` (drafts or fixes a lab) and `reviewer` (runs a drafted lab against the playground with the local AWS CLI, configured via [`scripts/aws-cli-configuration.ps1`](scripts/aws-cli-configuration.ps1) from `aws configure export-credentials` output pasted from CloudShell). See "Reviewing and shipping a lab" in `AGENT.md`.
 - `labs/INDEX.md` tracks each lab's status (`Planned` → `Drafted` → `Reviewed`) in its Status log section.
 
 ## Project status & TODO
