@@ -512,6 +512,10 @@ Basic operations are supported.
 
 Basic operations are supported.
 
+#### Observed limits (playground, reviewer run of lab `D1-T1-L04`)
+
+* **Denied:** `logs:DeleteLogGroup`. Lambda log groups (`/aws/lambda/<function>`) cannot be deleted by the student; cleanup docs must say they remain until the session ends.
+
 ### X-Ray
 
 #### Allowed
@@ -643,6 +647,11 @@ Basic operations are supported.
 #### Allowed
 
 Basic operations are supported.
+
+#### Observed limits (playground, reviewer run of lab `D1-T1-L04`)
+
+* **Denied:** `events:CreateEventBus` (no custom event buses; use the `default` bus) and `events:PutEvents` (on the custom bus and on `default`), so labs cannot publish custom events themselves.
+* **Confirmed working on the `default` bus:** `events:PutRule`, `events:PutTargets` (Lambda target, `FailedEntryCount` 0), `events:TestEventPattern`, and `lambda:AddPermission` for `events.amazonaws.com` scoped with `--source-arn` to the rule ARN.
 
 ### SNS (Simple Notification Service)
 
