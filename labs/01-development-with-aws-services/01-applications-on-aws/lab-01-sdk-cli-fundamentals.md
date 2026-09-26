@@ -10,7 +10,7 @@
 - `2.1.3` (see Domain 2 Task 1) — Configure programmatic access to AWS
 - `2.1.4` (see Domain 2 Task 1) — Make authenticated calls to AWS services
 
-**AWS Services Used:** AWS CloudShell, AWS Identity and Access Management (IAM), AWS Security Token Service (AWS STS), Amazon S3, Amazon DynamoDB, AWS CLI, AWS SDK for Python (Boto3)
+**AWS Services Used:** AWS CloudShell, AWS Identity and Access Management (IAM), AWS Security Token Service (AWS STS), Amazon S3, Amazon DynamoDB, AWS CLI
 **Region:** us-east-1
 **Prerequisites:** A KodeKloud AWS Playground session (no local machine setup needed — this lab runs entirely in AWS CloudShell, which comes pre-authenticated with the playground's IAM credentials and Python 3 + Boto3 preinstalled). Basic familiarity with Python and JSON.
 **Playground Constraints to Respect:**
@@ -36,8 +36,11 @@ Every exam skill and every later lab in this course assumes you're comfortable m
    export SUFFIX=$(date +%s)
    export BUCKET_NAME="dva-sdk-demo-${SUFFIX}"
    export TABLE_NAME="dva-sdk-demo-${SUFFIX}"
+   export AWS_DEFAULT_REGION=us-east-1
+   export AWS_REGION=us-east-1
    echo "$BUCKET_NAME / $TABLE_NAME"
    ```
+   The last two exports make every CLI command in this lab target `us-east-1`, the same Region the Boto3 script uses, even if CloudShell was launched from another Region (`AWS_REGION` takes precedence over `AWS_DEFAULT_REGION`, so both are set).
 
 3. **Write a Boto3 script that talks to AWS entirely through the SDK** — Create `sdk_demo.py` in CloudShell (use the built-in code editor via the CloudShell "Actions" menu, or `cat > sdk_demo.py << 'EOF' ... EOF`):
    ```python
@@ -48,7 +51,7 @@ Every exam skill and every later lab in this course assumes you're comfortable m
    table_name = os.environ["TABLE_NAME"]
    region = "us-east-1"
 
-   session = boto3.session.Session()
+   session = boto3.session.Session(region_name=region)
    s3 = session.client("s3")
    dynamodb = session.resource("dynamodb")
 
@@ -111,7 +114,7 @@ Every exam skill and every later lab in this course assumes you're comfortable m
 
 *Optional — the KodeKloud Playground automatically terminates and removes all session resources when your session ends. Run this only if you want to tear resources down sooner, e.g. to free up quota for another lab in the same session.*
 
-Run these in the same CloudShell session (variables are still set):
+Run these in the same CloudShell session (variables are still set; if you opened a new shell, re-export `BUCKET_NAME`, `TABLE_NAME`, `AWS_DEFAULT_REGION=us-east-1` and `AWS_REGION=us-east-1` first):
 ```bash
 aws dynamodb delete-table --table-name "$TABLE_NAME"
 aws s3 rm s3://$BUCKET_NAME --recursive
@@ -131,5 +134,6 @@ aws s3 ls s3://$BUCKET_NAME                                # should error: NoSuc
 - AWS CLI `dynamodb get-item` — https://github.com/aws/aws-cli/blob/develop/awscli/examples/dynamodb/get-item.rst
 - AWS CLI `s3 cp` — https://github.com/aws/aws-cli/blob/develop/awscli/examples/s3/cp.rst
 - AWS CLI `s3 rb` (force delete bucket) — https://github.com/aws/aws-cli/blob/develop/awscli/examples/s3/rb.rst
+- AWS CLI environment variables and Region precedence (`AWS_DEFAULT_REGION`, `AWS_REGION`) — https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
 - Boto3 DynamoDB Table `put_item` / `get_item` guide — https://github.com/boto/boto3/blob/develop/docs/source/guide/dynamodb.rst
 - Boto3 Session and client/resource creation — https://github.com/boto/boto3/blob/develop/docs/source/guide/session.rst
