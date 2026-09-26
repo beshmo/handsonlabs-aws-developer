@@ -108,7 +108,21 @@ A lab is done when:
 - [ ] Every resource/instance type/size/region choice fits `specs/kodekloud-aws-playground.md`.
 - [ ] The lab is self-contained and its Purpose–Validation flow is realistically completable in ~30 minutes.
 - [ ] A `## Cleanup (Optional)` section documents teardown for every resource created, in dependency order.
-- [ ] `labs/INDEX.md`'s row for this Lab ID has its `Status` updated (`Planned` → `Drafted`, and → `Reviewed` once a human has run it).
+- [ ] `labs/INDEX.md`'s row for this Lab ID has its `Status` updated (`Planned` → `Drafted`, and → `Reviewed` once it has been run end-to-end in the playground, by a human or by the `reviewer` agent).
+
+## Reviewing and shipping a lab
+
+Two subagents in `.claude/agents/` split the work; the **main agent orchestrates** (subagents can't call each other):
+
+- `builder` — drafts a lab from its catalog row (`build-lab` skill), or, given a reviewer report, fixes the listed issues in place.
+- `reviewer` — runs a `Drafted` lab step by step against the KodeKloud playground using the local AWS CLI, then returns a `PASS`/`FAIL` report. It never edits files.
+
+Loop:
+
+1. The user runs `aws configure export-credentials` in the playground's CloudShell and pastes the output (plus the Lab ID) to the main agent.
+2. Main agent → `reviewer` with the Lab ID and the pasted credentials. The reviewer configures the CLI with `scripts/aws-cli-configuration.ps1` and **stops at once with `CREDENTIALS_SETUP_FAILED`** unless `aws sts get-caller-identity` succeeds with an ARN of the form `arn:aws:iam::<account>:user/kk_labs_user_*`. On that result the main agent tells the user, stops the loop (no builder call, no retries, no repo changes) and waits until the user fixes the credentials.
+3. `FAIL` → main agent passes the issue report to `builder` (fix mode), then re-runs step 2 (asking for fresh credentials if they expired). Stop and ask the user after 3 rounds.
+4. `PASS` → main agent sets the lab's status to `Reviewed` in `labs/INDEX.md`, updates the progress lists in `README.md` (and `labs/README.md` if affected), creates a branch `lab/<id>-<slug>` from `main`, commits, pushes and opens a pull request with `gh`.
 
 ## How to add or generate a lab
 
