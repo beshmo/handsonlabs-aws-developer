@@ -30,7 +30,7 @@ If either is missing, stop and ask for it. Treat the credentials as secrets: nev
    `. .\scripts\aws-cli-configuration.ps1 --set-credentials '<pasted credentials>'`
    The script backs up `~/.aws`, sets the credentials for the session, writes them to `~/.aws` (so later separate tool calls keep working), and runs `aws sts get-caller-identity`. Then run `aws sts get-caller-identity` yourself.
    - **The guardrail is enforced by a PreToolUse hook** (`scripts/aws-guardrail-hook.ps1`, declared in this file's frontmatter). Before every Bash/PowerShell command that invokes the AWS CLI it verifies the caller identity and blocks the command unless the call succeeds **and** the `Arn` matches `^arn:aws:iam::\d{12}:user/kk_labs_user_.+` (example: `arn:aws:iam::654654525548:user/kk_labs_user_746981`). Only `aws-cli-configuration.ps1 --set-credentials|--restore` calls are exempt.
-   - **If any command is blocked with `CREDENTIALS_SETUP_FAILED`** (invalid/expired credentials, or a role, root, another IAM user or any non-KodeKloud identity), **stop immediately**, at any point of the run, including mid-lab: run `. .\scripts\aws-cli-configuration.ps1 --restore`, execute **no** further aws or lab command, and return only `CREDENTIALS_SETUP_FAILED` + the reason + the (non-secret) `Arn`/`Account` from the block message, plus (if it happened after step 4 started) the resources created so far as possibly left over. Never fall back to other credentials, never bypass or edit the hook, never "try anyway".
+   - **If any command is blocked with `CREDENTIALS_SETUP_FAILED`** (invalid/expired credentials, or a role, root, another IAM user or any non-KodeKloud identity), **stop immediately**, at any point of the run, including mid-lab: restore per step 7 (only if you ran `--set-credentials` this session), execute **no** further aws or lab command, and return only `CREDENTIALS_SETUP_FAILED` + the reason + the (non-secret) `Arn`/`Account` from the block message, plus (if it happened after step 4 started) the resources created so far as possibly left over. Never fall back to other credentials, never bypass or edit the hook, never "try anyway".
 
 4. **Execute the lab.** Run every step in order exactly as written, then the Validation section. Use the lab's own region. Adapt only shell syntax that cannot run in PowerShell/Bash as written, and record each adaptation as an issue (students will hit it too). Keep a list of every resource you create, and note the time spent from first step to end of Validation.
    - If a command fails, use `npx ctx7@latest` (`library` then `docs`) to decide whether it is a lab bug (wrong flag, wrong order, missing prerequisite, wrong expected output) or an environment problem (expired credentials, playground limit, transient error). Retry a transient failure once before recording it.
@@ -40,7 +40,7 @@ If either is missing, stop and ask for it. Treat the credentials as secrets: nev
 
 6. **Run the Cleanup section**, then check with `aws ... list/describe` calls that nothing the lab created is left. List anything left over.
 
-7. **Always restore the user's AWS configuration**, even after a failure or an early stop: `. .\scripts\aws-cli-configuration.ps1 --restore`.
+7. **Restore the user's AWS configuration** whenever you ran `--set-credentials` in this session, even after a failure or an early stop: `. .\scripts\aws-cli-configuration.ps1 --restore`. If you never ran `--set-credentials` (for example the credentials were already configured locally and a hook block stopped you at the first identity check), there is nothing to restore: do not run `--restore`, and report `Restored ~/.aws: not applicable (never modified)`.
 
 ## Report
 
@@ -58,7 +58,7 @@ Issues:
      Suggested fix: <concrete change to the lab text>
   ...
 Leftover resources: <none | list with ARN/ID>
-Restored ~/.aws: yes | no (<why>)
+Restored ~/.aws: yes | no (<why>) | not applicable (never modified)
 ```
 
 `PASS` means every step and the Validation ran as written (or with only `minor` issues the main agent may still choose to fix), the lab fits the limits, and Cleanup left nothing behind. Any `blocker`, or leftover resources, is a `FAIL`.
