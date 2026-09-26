@@ -49,3 +49,4 @@ Lab ID shorthand: `D<domain>-T<task>-L<seq>` (e.g. `D1-T2-L03`), used in `labs/I
 - `.claude/skills/build-lab/SKILL.md` — the reusable generation workflow behind `/build-lab`.
 - `.claude/agents/builder.md` / `reviewer.md` — subagents that draft/fix a lab and that verify a `Drafted` lab against the playground; the review → fix → PR loop is described in `AGENT.md` ("Reviewing and shipping a lab").
 - `scripts/aws-cli-configuration.ps1` — points the local AWS CLI at pasted CloudShell credentials (`--set-credentials`) and restores the original setup (`--restore`); used by `reviewer`.
+- `scripts/aws-guardrail-hook.ps1` — PreToolUse hook (declared in `reviewer.md`) that blocks any AWS CLI command unless the caller is a `kk_labs_user_*` IAM user, returning `CREDENTIALS_SETUP_FAILED`.
