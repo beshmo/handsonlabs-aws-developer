@@ -112,7 +112,7 @@ A lab is done when:
 
 ## Reviewing and shipping a lab
 
-Two subagents in `.claude/agents/` split the work; the **main agent orchestrates** (subagents can't call each other):
+Two subagents in `.claude/agents/` split the work; the **main agent orchestrates** (subagents can't call each other). The `principal` agent (`.claude/agents/principal.md`) encodes this loop: start a session with `claude --agent principal` and give it a Lab ID, and it runs build → review → fix → ship, asking you for fresh credentials before each review. It never merges PRs, and it stops and asks when the playground denies a lab's core mechanism. Working without it, the main agent follows the same steps by hand.
 
 - `builder` — drafts a lab from its catalog row (`build-lab` skill), or, given a reviewer report, fixes the listed issues in place.
 - `reviewer` — runs a `Drafted` lab step by step against the KodeKloud playground using the local AWS CLI, then returns a `PASS`/`FAIL` report. It never edits files.
