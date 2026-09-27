@@ -16,6 +16,7 @@ All labs below are **Planned** unless listed in the Drafted/Reviewed status log,
 | D1-T1-L02 | Reviewed |
 | D1-T1-L03 | Reviewed |
 | D1-T1-L04 | Reviewed |
+| D1-T1-L05 | Reviewed |
 
 > **IAM note:** the playground denies `iam:PutRolePolicy` (inline role policies); roles can be created and AWS managed policies attached, and Lambda execution roles must be created under `--path /service-role/` (else `iam:PassRole` is denied). Labs that build Lambda execution roles or teach IAM permissions (e.g. D2-T1-L04, D2-T1-L05) must be designed around this — see the IAM section of `specs/kodekloud-aws-playground.md`.
 
@@ -32,7 +33,7 @@ Folder: `labs/01-development-with-aws-services/01-applications-on-aws/`
 | D1-T1-L02 | Decoupling Services with Amazon SQS | `lab-02-sqs-decoupling.md` | 1.1.3, 1.1.8 | 1.1.4 | SQS, Lambda |
 | D1-T1-L03 | Fan-Out Messaging with SNS + SQS | `lab-03-sns-sqs-fanout.md` | 1.1.1, 1.1.4 | 1.1.8 | SNS, SQS |
 | D1-T1-L04 | Event-Driven Architecture with Amazon EventBridge | `lab-04-eventbridge-event-driven.md` | 1.1.12, 1.1.1 | — | EventBridge, S3, Lambda |
-| D1-T1-L05 | Building Resilient Application Code (Retries, Backoff, Circuit Breakers) | `lab-05-resilient-app-code.md` | 1.1.5, 1.1.13 | — | AWS SDK, DynamoDB |
+| D1-T1-L05 | Building Resilient Application Code (Retries, Backoff, Circuit Breakers) | `lab-05-resilient-app-code.md` | 1.1.5, 1.1.13 | — | AWS CLI/SDK, DynamoDB |
 | D1-T1-L06 | Extending APIs with API Gateway (Transformations, Validation, Status Codes) | `lab-06-api-gateway-request-response.md` | 1.1.6 | — | API Gateway, Lambda |
 | D1-T1-L07 | Unit Testing Serverless Apps with AWS SAM | `lab-07-sam-unit-testing.md` | 1.1.7 | 3.3.1 | AWS SAM, Lambda |
 | D1-T1-L08 | Streaming Data Processing with Kinesis and Lambda | `lab-08-kinesis-lambda-streaming.md` | 1.1.10 | 1.2.7 | Kinesis Data Streams, Lambda |

@@ -982,6 +982,7 @@ Manages containerized applications.
 Provides fast, scalable NoSQL databases.
 * Provisioned throughput set to 1 read and 1 write capacity unit.
 * Billing mode set to `"PAY_PER_REQUEST."`
+* **Observed (D1-T1-L05 review):** a table created with `--billing-mode PROVISIONED` at 1 RCU/1 WCU is silently auto-converted to `PAY_PER_REQUEST` roughly 5 minutes after creation, with no `update-table` call from the lab causing it. A lab that depends on real provisioned-throughput throttling (e.g. to demonstrate `ProvisionedThroughputExceededException`) should complete that demonstration within a few minutes of table creation, and/or defensively re-check `BillingModeSummary.BillingMode` via `describe-table` and reset it with `update-table` if it has drifted, rather than assuming PROVISIONED mode holds for the lab's full duration.
 
 ## Restrictions
 
