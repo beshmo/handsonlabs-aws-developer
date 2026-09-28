@@ -323,6 +323,11 @@ Basic operations are supported.
 
 * No global tables
 
+#### Observed limits (playground, reviewer run of lab `D1-T1-L08`)
+
+* **Confirmed working:** DynamoDB Streams (`--stream-specification StreamEnabled=true,StreamViewType=NEW_AND_OLD_IMAGES` on `create-table`) and its full Lambda consumer path — `lambda:CreateEventSourceMapping` against a table's `LatestStreamArn`, the mapping reaching `Enabled`, and the `AWSLambdaDynamoDBExecutionRole` managed policy's data-plane actions (`dynamodb:DescribeStream`, `GetRecords`, `GetShardIterator`, `ListStreams`) all worked for a `kk_labs_user_*` identity — no SCP-style deny, unlike Kinesis Data Streams (see the Kinesis section above). Note: the `dynamodb` CLI namespace has no `list-streams` subcommand; use `dynamodbstreams list-streams` if probing streams directly (the lab itself never needs this — `describe-table --query Table.LatestStreamArn` is sufficient).
+* **Timing note:** DynamoDB Streams polling + Lambda cold start can occasionally take longer than 20s end-to-end before records show up in CloudWatch Logs; a lab checking logs immediately after writing to a stream-enabled table should allow ~30-40s or poll/retry rather than a flat 20s sleep.
+
 ### RDS Data API
 
 #### Allowed
@@ -641,6 +646,11 @@ Basic operations are supported.
 
 * SQL-based applications.
 * Basic Processing
+
+#### Observed limits (playground, reviewer runs of lab `D1-T1-L08`)
+
+* **Denied, confirmed reproducible across two independent sessions/users:** `kinesis:CreateStream` and `kinesis:ListStreams` both fail with `AccessDeniedException` citing an **explicit deny in a service control policy** (org-level SCP, not an IAM identity policy): `arn:aws:organizations::598274344262:policy/o-ptvbaba0eu/service_control_policy/p-q3jk9ahy`. First observed under `kk_labs_user_712769`; independently reconfirmed with a fresh CloudShell session under a different `kk_labs_user_*` identity in the same account, same policy ARN, same two actions. This contradicts the "Allowed"/"Limits" sections above, which describe Kinesis Data Streams as supported with specific quotas — in practice the service is blocked outright before any quota applies.
+* **Status:** confirmed, not a session-specific fluke. Treat Kinesis Data Streams as **unusable in this playground** until/unless the org SCP changes. `D1-T1-L08` was originally designed around Kinesis and has since been redesigned around DynamoDB Streams instead (see the DynamoDB section's "Observed limits" above). Any other lab depending on Kinesis Data Streams (e.g. `D1-T2-L06`) must be redesigned around a different in-scope streaming/queueing mechanism (e.g. DynamoDB Streams, SQS) or dropped from the catalog before it is built.
 
 ### EventBridge
 

@@ -46,7 +46,7 @@ This repo's lab content is generated incrementally, one lab at a time, to keep q
 
 ## Project status & TODO
 
-**Drafted so far: 7 / 80 labs** (Domain 1, Task 1):
+**Drafted so far: 8 / 80 labs** (Domain 1, Task 1):
 - [x] `D1-T1-L01` — AWS SDK & CLI Fundamentals: Making Authenticated Calls
 - [x] `D1-T1-L02` — Decoupling Services with Amazon SQS
 - [x] `D1-T1-L03` — Fan-Out Messaging with SNS + SQS
@@ -54,9 +54,9 @@ This repo's lab content is generated incrementally, one lab at a time, to keep q
 - [x] `D1-T1-L05` — Building Resilient Application Code (Retries, Backoff, Circuit Breakers)
 - [x] `D1-T1-L06` — Extending APIs with API Gateway (Transformations, Validation, Status Codes)
 - [x] `D1-T1-L07` — Unit Testing Serverless Apps with AWS SAM
+- [x] `D1-T1-L08` — Streaming Data Processing with DynamoDB Streams and Lambda
 
 **Next up — finish Domain 1, Task 1** (`labs/01-development-with-aws-services/01-applications-on-aws/`):
-- [ ] `D1-T1-L08` — Streaming Data Processing with Kinesis and Lambda
 - [ ] `D1-T1-L09` — Accelerating Development with Amazon Q Developer
 
 **Then the rest of the catalog** (see [`labs/INDEX.md`](labs/INDEX.md) for full lab lists per task):
