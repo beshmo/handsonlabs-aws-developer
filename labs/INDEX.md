@@ -19,6 +19,7 @@ All labs below are **Planned** unless listed in the Drafted/Reviewed status log,
 | D1-T1-L05 | Reviewed |
 | D1-T1-L06 | Reviewed |
 | D1-T1-L07 | Reviewed |
+| D1-T1-L08 | Reviewed |
 
 > **IAM note:** the playground denies `iam:PutRolePolicy` (inline role policies); roles can be created and AWS managed policies attached, and Lambda execution roles must be created under `--path /service-role/` (else `iam:PassRole` is denied). Labs that build Lambda execution roles or teach IAM permissions (e.g. D2-T1-L04, D2-T1-L05) must be designed around this — see the IAM section of `specs/kodekloud-aws-playground.md`.
 
@@ -38,7 +39,7 @@ Folder: `labs/01-development-with-aws-services/01-applications-on-aws/`
 | D1-T1-L05 | Building Resilient Application Code (Retries, Backoff, Circuit Breakers) | `lab-05-resilient-app-code.md` | 1.1.5, 1.1.13 | — | AWS CLI/SDK, DynamoDB |
 | D1-T1-L06 | Extending APIs with API Gateway (Transformations, Validation, Status Codes) | `lab-06-api-gateway-request-response.md` | 1.1.6 | — | API Gateway, Lambda |
 | D1-T1-L07 | Unit Testing Serverless Apps with AWS SAM | `lab-07-sam-unit-testing.md` | 1.1.7 | 3.3.1 | AWS SAM, Lambda |
-| D1-T1-L08 | Streaming Data Processing with Kinesis and Lambda | `lab-08-kinesis-lambda-streaming.md` | 1.1.10 | 1.2.7 | Kinesis Data Streams, Lambda |
+| D1-T1-L08 | Streaming Data Processing with DynamoDB Streams and Lambda | `lab-08-dynamodb-streams-lambda.md` | 1.1.10 | 1.2.7 | DynamoDB Streams, Lambda |
 | D1-T1-L09 | Accelerating Development with Amazon Q Developer | `lab-09-amazon-q-developer.md` | 1.1.11 | 3.3.6 | Amazon Q Developer, Lambda |
 
 ### Task 2: Develop code for AWS Lambda
