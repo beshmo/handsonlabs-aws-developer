@@ -46,7 +46,7 @@ This repo's lab content is generated incrementally, one lab at a time, to keep q
 
 ## Project status & TODO
 
-**Drafted so far: 8 / 80 labs** (Domain 1, Task 1):
+**Drafted so far: 9 / 80 labs** (Domain 1, Task 1 — complete):
 - [x] `D1-T1-L01` — AWS SDK & CLI Fundamentals: Making Authenticated Calls
 - [x] `D1-T1-L02` — Decoupling Services with Amazon SQS
 - [x] `D1-T1-L03` — Fan-Out Messaging with SNS + SQS
@@ -55,12 +55,17 @@ This repo's lab content is generated incrementally, one lab at a time, to keep q
 - [x] `D1-T1-L06` — Extending APIs with API Gateway (Transformations, Validation, Status Codes)
 - [x] `D1-T1-L07` — Unit Testing Serverless Apps with AWS SAM
 - [x] `D1-T1-L08` — Streaming Data Processing with DynamoDB Streams and Lambda
+- [x] `D1-T1-L09` — Accelerating Development with Amazon Q Developer
 
-**Next up — finish Domain 1, Task 1** (`labs/01-development-with-aws-services/01-applications-on-aws/`):
-- [ ] `D1-T1-L09` — Accelerating Development with Amazon Q Developer
+**Next up — Domain 1, Task 2: Develop code for AWS Lambda** (`labs/01-development-with-aws-services/02-lambda-development/`):
+- [ ] `D1-T2-L01` — Configuring Lambda: Environment Variables, Layers, and Triggers
+- [ ] `D1-T2-L02` — Lambda Error Handling: Destinations and Dead-Letter Queues
+- [ ] `D1-T2-L03` — Lambda Access to Private VPC Resources
+- [ ] `D1-T2-L04` — Testing Lambda Functions Locally and in the Cloud
+- [ ] `D1-T2-L05` — Tuning Lambda for Performance and Cost
+- [ ] `D1-T2-L06` — Near-Real-Time Data Transformation with DynamoDB Streams
 
 **Then the rest of the catalog** (see [`labs/INDEX.md`](labs/INDEX.md) for full lab lists per task):
-- [ ] Domain 1, Task 2 — Lambda development (`D1-T2-L01`…`L06`, 6 labs)
 - [ ] Domain 1, Task 3 — Data stores (`D1-T3-L01`…`L06`, 6 labs)
 - [ ] Domain 2, Task 1 — AuthN/AuthZ (`D2-T1-L01`…`L06`, 6 labs)
 - [ ] Domain 2, Task 2 — Encryption (`D2-T2-L01`…`L05`, 5 labs)
