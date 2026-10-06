@@ -19,7 +19,7 @@ Source: [`specs/exam/Domain_1_Development_with_AWS_Services.md`](../../../specs/
 | Lab ID | Title | File |
 |---|---|---|
 | D1-T2-L01 | Configuring Lambda: Environment Variables, Layers, and Triggers | `lab-01-lambda-env-layers-triggers.md` |
-| D1-T2-L02 | Lambda Error Handling: Destinations and Dead-Letter Queues | `lab-02-lambda-destinations-dlq.md` |
+| D1-T2-L02 | Lambda Error Handling: Synchronous Errors and Dead-Letter Queues | `lab-02-lambda-destinations-dlq.md` |
 | D1-T2-L03 | Lambda Access to Private VPC Resources | `lab-03-lambda-vpc-private-access.md` |
 | D1-T2-L04 | Testing Lambda Functions Locally and in the Cloud | `lab-04-lambda-testing-local-cloud.md` |
 | D1-T2-L05 | Tuning Lambda for Performance and Cost | `lab-05-lambda-performance-tuning.md` |

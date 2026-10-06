@@ -46,7 +46,7 @@ This repo's lab content is generated incrementally, one lab at a time, to keep q
 
 ## Project status & TODO
 
-**Drafted so far: 10 / 80 labs** (Domain 1, Task 1 — complete; Task 2 in progress):
+**Drafted so far: 11 / 80 labs** (Domain 1, Task 1 — complete; Task 2 in progress):
 - [x] `D1-T1-L01` — AWS SDK & CLI Fundamentals: Making Authenticated Calls
 - [x] `D1-T1-L02` — Decoupling Services with Amazon SQS
 - [x] `D1-T1-L03` — Fan-Out Messaging with SNS + SQS
@@ -57,9 +57,9 @@ This repo's lab content is generated incrementally, one lab at a time, to keep q
 - [x] `D1-T1-L08` — Streaming Data Processing with DynamoDB Streams and Lambda
 - [x] `D1-T1-L09` — Accelerating Development with Amazon Q Developer
 - [x] `D1-T2-L01` — Configuring Lambda: Environment Variables, Layers, and Triggers
+- [x] `D1-T2-L02` — Lambda Error Handling: Synchronous Errors and Dead-Letter Queues
 
 **Next up — Domain 1, Task 2: Develop code for AWS Lambda** (`labs/01-development-with-aws-services/02-lambda-development/`):
-- [ ] `D1-T2-L02` — Lambda Error Handling: Destinations and Dead-Letter Queues
 - [ ] `D1-T2-L03` — Lambda Access to Private VPC Resources
 - [ ] `D1-T2-L04` — Testing Lambda Functions Locally and in the Cloud
 - [ ] `D1-T2-L05` — Tuning Lambda for Performance and Cost

@@ -22,6 +22,7 @@ All labs below are **Planned** unless listed in the Drafted/Reviewed status log,
 | D1-T1-L08 | Reviewed |
 | D1-T1-L09 | Reviewed |
 | D1-T2-L01 | Reviewed |
+| D1-T2-L02 | Reviewed |
 
 > **IAM note:** the playground denies `iam:PutRolePolicy` (inline role policies); roles can be created and AWS managed policies attached, and Lambda execution roles must be created under `--path /service-role/` (else `iam:PassRole` is denied). Labs that build Lambda execution roles or teach IAM permissions (e.g. D2-T1-L04, D2-T1-L05) must be designed around this — see the IAM section of `specs/kodekloud-aws-playground.md`.
 
@@ -50,7 +51,7 @@ Folder: `labs/01-development-with-aws-services/02-lambda-development/`
 | Lab ID | Title | File | Primary Skills | Secondary Skills | Services |
 |---|---|---|---|---|---|
 | D1-T2-L01 | Configuring Lambda: Environment Variables, Layers, and Triggers | `lab-01-lambda-env-layers-triggers.md` | 1.2.2, 1.2.5 | — | Lambda, S3 |
-| D1-T2-L02 | Lambda Error Handling: Destinations and Dead-Letter Queues | `lab-02-lambda-destinations-dlq.md` | 1.2.3 | — | Lambda, SQS, SNS |
+| D1-T2-L02 | Lambda Error Handling: Synchronous Errors and Dead-Letter Queues | `lab-02-lambda-destinations-dlq.md` | 1.2.3 | — | Lambda, SQS, SNS |
 | D1-T2-L03 | Lambda Access to Private VPC Resources | `lab-03-lambda-vpc-private-access.md` | 1.2.1 | — | Lambda, VPC, RDS |
 | D1-T2-L04 | Testing Lambda Functions Locally and in the Cloud | `lab-04-lambda-testing-local-cloud.md` | 1.2.4 | 1.1.7, 3.3.1 | Lambda, AWS SAM |
 | D1-T2-L05 | Tuning Lambda for Performance and Cost | `lab-05-lambda-performance-tuning.md` | 1.2.6 | 4.3.2, 4.3.3 | Lambda, CloudWatch |
