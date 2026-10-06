@@ -36,6 +36,12 @@ Each domain folder has one subfolder per exam Task, and each Task folder has a `
 2. Browse [`labs/INDEX.md`](labs/INDEX.md) for the complete catalog and skill-coverage matrix.
 3. Open a lab file and follow it top to bottom: Purpose → Steps → Validation → Cleanup (optional).
 
+### Suggested session layout
+
+Put the lab on the left and AWS CloudShell (in the playground console) on the right, so you can read each step and run its commands side by side:
+
+![Training session layout: the lab on the left, AWS CloudShell on the right](docs/images/training-session-layout.png)
+
 ## For maintainers: extending the course
 
 This repo's lab content is generated incrementally, one lab at a time, to keep quality and AWS-syntax accuracy high:
