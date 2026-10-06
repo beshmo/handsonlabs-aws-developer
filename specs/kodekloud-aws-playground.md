@@ -73,6 +73,12 @@ T-series instances (`t2`, `t3`, `t3a`, `t4g`) must operate in Standard CPU credi
   * Function URLs supported (IAM auth only — public URLs blocked)
   * Layer usage permitted (own account only — no public or cross-account sharing)
 
+#### Observed limits (playground, reviewer run of lab `D1-T2-L02`)
+
+* **Denied:** `lambda:PutFunctionEventInvokeConfig` and `lambda:UpdateFunctionEventInvokeConfig` (`AccessDeniedException`, no identity-based policy allows them; a retry after 20 s gave the same error, so it is not IAM propagation). **Lambda Destinations (OnSuccess/OnFailure) and per-function async retry/max-event-age settings cannot be configured.** `get-function-event-invoke-config` returns `ResourceNotFoundException`; `list-function-event-invoke-configs` is allowed (empty list).
+* **Confirmed working:** `create-role --path /service-role/` plus `attach-role-policy` of `AmazonSQSFullAccess` and `AmazonSNSFullAccess`; function-level DLQ via `update-function-configuration --dead-letter-config TargetArn=<SNS topic ARN>`; an SNS-topic DLQ fanning out to an SQS queue (with queue policy) delivered the failed event with `ErrorCode`, `ErrorMessage` and `RequestID` message attributes; `lambda invoke --invocation-type Event` returns 202; a function DLQ pointing directly at an SQS queue ARN (role with `AmazonSQSFullAccess`) is accepted and delivers the original event as the message body with `ErrorCode` (Number), `ErrorMessage` and `RequestID` message attributes; sync invoke of a failing function returns 200 with `FunctionError: Unhandled` and sends nothing to the DLQ.
+* **Timing note:** with no invoke config the async defaults apply (2 retries with back-off), so the failed event reached the DLQ about 2-4 minutes after the invoke (3.5 min in the first run, under ~3 min in the re-run), not seconds.
+
 #### Observed limits (playground, reviewer run of lab `D1-T2-L01`)
 
 * **Denied:** `lambda:PublishLayerVersion` (`aws lambda publish-layer-version` returns `AccessDeniedException`: no identity-based policy allows it; retry gives the same result, `list-layers` stays empty) and `lambda:DeleteLayerVersion`. Despite "Layer usage permitted" above, a `kk_labs_user_*` identity **cannot create layers**. Whether attaching an existing layer (e.g. an AWS-published public layer ARN) via `lambda:GetLayerVersion` works is **untested**.
