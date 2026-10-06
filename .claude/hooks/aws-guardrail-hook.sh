@@ -6,10 +6,8 @@
 # Reads the hook JSON from stdin. Exit 0 = no objection, exit 2 = block (stderr goes to the
 # agent as feedback). Fails closed: if the identity can't be verified, the command is blocked.
 #
-# Always allowed (needed to set up / tear down the check itself):
-#   - commands that do not invoke the AWS CLI
-#   - . ./scripts/aws-cli-configuration.sh --set-credentials|--restore|--help  (only when it
-#     is the sole AWS-related part of the command; anything else chained to it is still checked)
+# Always allowed: commands that do not invoke the AWS CLI. The identity comes from the
+# AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY environment variables of the user's shell.
 
 set -u
 
@@ -17,7 +15,7 @@ ALLOWED_ARN_PATTERN='^arn:aws:iam::[0-9]{12}:user/kk_labs_user_.+$'
 
 block() {
   echo "CREDENTIALS_SETUP_FAILED: $1" >&2
-  echo "Stop immediately: run no further lab or aws commands. Run only '. ./scripts/aws-cli-configuration.sh --restore', then report CREDENTIALS_SETUP_FAILED, this reason and any Arn/Account shown above to the main agent." >&2
+  echo "Stop immediately: run no further lab or aws commands, then report CREDENTIALS_SETUP_FAILED, this reason and any Arn/Account shown above to the main agent." >&2
   exit 2
 }
 
@@ -62,9 +60,7 @@ if [ -z "${command_text// /}" ]; then
 fi
 
 # Ignore quoted strings (credentials, JSON, message text) when looking for an aws invocation,
-# and drop the credentials-script call itself so only other commands remain.
 scan="$(printf '%s' "$command_text" | sed -E "s/'[^']*'/ /g; s/\"[^\"]*\"/ /g")"
-scan="$(printf '%s' "$scan" | sed -E 's#[^][:space:];|&()]*aws-cli-configuration\.sh[[:space:]]+--(set-credentials|restore|help)\b[^;|&]*# #Ig')"
 
 if ! printf '%s' "$scan" | grep -qiP '(^|[\s;|&(`{])([^\s;|&()]*[\\/])?aws(\.exe)?(\s|$)'; then
   exit 0
