@@ -73,6 +73,12 @@ T-series instances (`t2`, `t3`, `t3a`, `t4g`) must operate in Standard CPU credi
   * Function URLs supported (IAM auth only — public URLs blocked)
   * Layer usage permitted (own account only — no public or cross-account sharing)
 
+#### Observed limits (playground, reviewer run of lab `D1-T2-L01`)
+
+* **Denied:** `lambda:PublishLayerVersion` (`aws lambda publish-layer-version` returns `AccessDeniedException`: no identity-based policy allows it; retry gives the same result, `list-layers` stays empty) and `lambda:DeleteLayerVersion`. Despite "Layer usage permitted" above, a `kk_labs_user_*` identity **cannot create layers**. Whether attaching an existing layer (e.g. an AWS-published public layer ARN) via `lambda:GetLayerVersion` works is **untested**.
+* **Confirmed working (layers):** attaching an AWS-published public layer from another account works — `lambda get-layer-version-by-arn` and `create-function --layers` on `arn:aws:lambda:us-east-1:017000801446:layer:AWSLambdaPowertoolsPythonV3-python312-x86_64:37` succeeded (so `lambda:GetLayerVersion` is allowed on public layers), and the function imported `aws_lambda_powertools` from `/opt/python` at 128 MB / 10 s. Student-published layers remain impossible.
+* **Confirmed working:** `create-function` without layers (python3.12, 128 MB, 10 s timeout, role under `/service-role/` with `AWSLambdaBasicExecutionRole`), environment variables via `--environment` and `update-function-configuration`, `lambda add-permission` for `s3.amazonaws.com`, and S3 `put-bucket-notification-configuration` with a prefix/suffix filter triggering the function; logs appear in CloudWatch within ~1-2 polls.
+
 #### Lambda Timeout
 
 Lambda functions are subject to a maximum timeout of 10 seconds. Functions exceeding this will be automatically reset to 3 seconds. Timeouts greater than 30 seconds are considered a policy violation and will result in session suspension.
